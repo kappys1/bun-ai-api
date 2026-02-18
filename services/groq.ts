@@ -1,10 +1,10 @@
-import { Groq } from 'groq-sdk';
-import type { AIService, ChatMessage } from '../types';
+import { Groq } from "groq-sdk";
+import type { AIService, ChatMessage } from "../types";
 
 const groq = new Groq();
 
 export const groqService: AIService = {
-  name: 'Groq',
+  name: "Groq",
   async chat(messages: ChatMessage[]) {
     const chatCompletion = await groq.chat.completions.create({
       messages,
@@ -13,14 +13,13 @@ export const groqService: AIService = {
       max_completion_tokens: 4096,
       top_p: 1,
       stream: true,
-      stop: null
+      stop: null,
     });
-    
+
     return (async function* () {
       for await (const chunk of chatCompletion) {
-        yield chunk.choices[0]?.delta?.content || ''
+        yield chunk.choices[0]?.delta?.content || "";
       }
-    })()
-  }
-}
-
+    })();
+  },
+};
