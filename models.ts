@@ -11,6 +11,14 @@ import type { ModelEntry } from "./types";
  * y asegurarse de que el provider correspondiente está registrado.
  */
 export const modelMatrix: ModelEntry[] = [
+  {
+    id: "groq-compound",
+    name: "groq compound",
+    owned_by: "groq",
+    reasoning: true,
+    providers: [{ providerKey: "groq", model: "groq/compound" }],
+  },
+
   // ── GLM-5 ──
   {
     id: "glm-5",
@@ -135,4 +143,22 @@ export function getNextProvider(entry: ModelEntry) {
   const provider = entry.providers[idx % entry.providers.length];
   providerIndex.set(entry.id, idx + 1);
   return provider;
+}
+
+/**
+ * Devuelve un iterador de providers ordenados por round-robin.
+ * Si el primero falla, el handler puede llamar a next() para probar el siguiente.
+ * Recorre todos los providers una vez antes de agotarse.
+ */
+export function* getProvidersWithFallback(entry: ModelEntry) {
+  const startIdx = providerIndex.get(entry.id) ?? 0;
+  const count = entry.providers.length;
+
+  for (let i = 0; i < count; i++) {
+    const provider = entry.providers[(startIdx + i) % count];
+    yield provider;
+  }
+
+  // Avanzar el índice para la siguiente petición
+  providerIndex.set(entry.id, startIdx + 1);
 }

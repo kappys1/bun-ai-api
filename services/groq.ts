@@ -1,25 +1,8 @@
-import { Groq } from "groq-sdk";
-import type { AIProvider, ChatConfig, ChatMessage } from "../types";
+import { createOpenAICompatibleProvider } from "./openai-factory";
 
-const groq = new Groq();
-
-export const groqProvider: AIProvider = {
+export const groqProvider = createOpenAICompatibleProvider({
   name: "Groq",
-  async chat(model: string, messages: ChatMessage[], config?: ChatConfig) {
-    const chatCompletion = await groq.chat.completions.create({
-      messages,
-      model,
-      temperature: config?.temperature ?? 0.6,
-      max_completion_tokens: config?.max_tokens ?? 4096,
-      top_p: config?.top_p ?? 1,
-      stream: true,
-      stop: null,
-    });
-
-    return (async function* () {
-      for await (const chunk of chatCompletion) {
-        yield chunk.choices[0]?.delta?.content || "";
-      }
-    })();
-  },
-};
+  baseURL: "https://api.groq.com/openai/v1",
+  apiKey: process.env.GROQ_API_KEY,
+  maxTokensParam: "max_completion_tokens",
+});

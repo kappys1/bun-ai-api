@@ -11,19 +11,14 @@ import { vercelProvider } from "./vercel";
  * La clave es el providerKey usado en la matriz de modelos.
  */
 
-export type ProviderServicesNames =
-  | "huggingface"
-  | "groq"
-  | "cerebras"
-  | "openrouter"
-  | "google"
-  | "vercel";
-
-export const providerRegistry: Record<ProviderServicesNames, AIProvider> = {
+export const providerRegistry = {
   huggingface: huggingFaceProvider,
   groq: groqProvider,
   cerebras: cerebrasProvider,
   openrouter: openRouterProvider,
   google: googleProvider,
   vercel: vercelProvider,
-};
+} as const satisfies Record<string, AIProvider>;
+
+/** Tipo inferido automáticamente del registro — no se mantiene a mano */
+export type ProviderServicesNames = keyof typeof providerRegistry;
