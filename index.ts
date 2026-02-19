@@ -2,12 +2,14 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { completionsHandler } from "./handlers/completions";
 import { modelsHandler } from "./handlers/models";
+import { authMiddleware } from "./middleware/auth";
 import { validateChatCompletion } from "./middleware/validation";
 
 const app = new Hono();
 
 // ── Middleware global ──
 app.use("*", cors());
+app.use("/v1/*", authMiddleware);
 
 // ── Routes ──
 app.get("/v1/models", modelsHandler);
