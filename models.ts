@@ -66,7 +66,6 @@ export const modelMatrix: ModelEntry[] = [
     ],
   },
 
-  // ── Cerebras GPT-OSS 120B ──
   {
     id: "gpt-oss-120b",
     name: "GPT-OSS 120B",
@@ -89,8 +88,8 @@ export const modelMatrix: ModelEntry[] = [
   {
     id: "llama3.3-70B",
     name: "LLaMA 3.3 70B",
-    owned_by: "cerebras",
-    providers: [{ providerKey: "cerebras", model: "llama-3.3-70b-versatile" }],
+    owned_by: "groq",
+    providers: [{ providerKey: "groq", model: "llama-3.3-70b-versatile" }],
   },
 
   // ── DeepSeek R1 ──
