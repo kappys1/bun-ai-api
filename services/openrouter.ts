@@ -1,21 +1,21 @@
 import OpenAI from "openai";
-import type { AIService, ChatMessage } from "../types";
+import type { AIProvider, ChatConfig, ChatMessage } from "../types";
 
 const openrouter = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENROUTER_API_KEY,
 });
 
-export const openRouterService: AIService = {
+export const openRouterProvider: AIProvider = {
   name: "OpenRouter",
-  async chat(messages: ChatMessage[]) {
+  async chat(model: string, messages: ChatMessage[], config?: ChatConfig) {
     const stream = await openrouter.chat.completions.create({
-      model: "google/gemini-2.0-flash-001",
+      model,
       messages: messages as any,
       stream: true,
-      temperature: 0.6,
-      max_tokens: 4096,
-      top_p: 0.95,
+      temperature: config?.temperature ?? 0.6,
+      max_tokens: config?.max_tokens ?? 4096,
+      top_p: config?.top_p ?? 0.95,
     });
 
     return (async function* () {

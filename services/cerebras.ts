@@ -1,18 +1,18 @@
 import Cerebras from "@cerebras/cerebras_cloud_sdk";
-import type { AIService, ChatMessage } from "../types";
+import type { AIProvider, ChatConfig, ChatMessage } from "../types";
 
 const cerebras = new Cerebras();
 
-export const cerebrasService: AIService = {
+export const cerebrasProvider: AIProvider = {
   name: "Cerebras",
-  async chat(messages: ChatMessage[]) {
+  async chat(model: string, messages: ChatMessage[], config?: ChatConfig) {
     const stream = await cerebras.chat.completions.create({
       messages: messages as any,
-      model: "gpt-oss-120b",
+      model,
       stream: true,
-      max_completion_tokens: 40960,
-      temperature: 0.6,
-      top_p: 0.95,
+      max_completion_tokens: config?.max_tokens ?? 40960,
+      temperature: config?.temperature ?? 0.6,
+      top_p: config?.top_p ?? 0.95,
     });
 
     return (async function* () {

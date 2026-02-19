@@ -1,21 +1,21 @@
 import OpenAI from "openai";
-import type { AIService, ChatMessage } from "../types";
+import type { AIProvider, ChatConfig, ChatMessage } from "../types";
 
 const vercel = new OpenAI({
   baseURL: "https://ai-gateway.vercel.sh/v1",
   apiKey: process.env.AI_GATEWAY_API_KEY,
 });
 
-export const vercelService: AIService = {
+export const vercelProvider: AIProvider = {
   name: "Vercel AI Gateway",
-  async chat(messages: ChatMessage[]) {
+  async chat(model: string, messages: ChatMessage[], config?: ChatConfig) {
     const stream = await vercel.chat.completions.create({
-      model: "google/gemini-2.0-flash",
+      model,
       messages: messages as any,
       stream: true,
-      temperature: 0.6,
-      max_tokens: 4096,
-      top_p: 0.95,
+      temperature: config?.temperature ?? 0.6,
+      max_tokens: config?.max_tokens ?? 4096,
+      top_p: config?.top_p ?? 0.95,
     });
 
     return (async function* () {
