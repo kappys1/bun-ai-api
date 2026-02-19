@@ -1,4 +1,4 @@
-import { createOpenAICompatibleProvider } from "./openai-factory";
+import { createOpenAICompatibleProvider } from "./factory/openai-factory";
 
 export const openRouterProvider = createOpenAICompatibleProvider({
   name: "OpenRouter",

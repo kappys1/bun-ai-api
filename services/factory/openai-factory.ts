@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import type { AIProvider, ChatConfig, ChatMessage } from "../types";
+import type { AIProvider, ChatConfig, ChatMessage } from "../../types";
 
 /**
  * Factory para crear providers compatibles con la API de OpenAI.

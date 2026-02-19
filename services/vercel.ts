@@ -1,4 +1,4 @@
-import { createOpenAICompatibleProvider } from "./openai-factory";
+import { createOpenAICompatibleProvider } from "./factory/openai-factory";
 
 export const vercelProvider = createOpenAICompatibleProvider({
   name: "Vercel AI Gateway",
